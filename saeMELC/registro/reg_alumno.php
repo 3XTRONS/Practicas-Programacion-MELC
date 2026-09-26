@@ -1,25 +1,13 @@
 <?php
-// Incluir el archivo de conexión (sube un nivel a la carpeta raíz para encontrar conexion.php)
-include_once("../conexion.php");
-
+// Capturar respuestas enviadas desde procesos/insert_alumno.php
 $mensaje = "";
-
-// Procesar los datos cuando el usuario envía el formulario
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombre_materia = $_POST['nombre_materia'] ?? '';
-
-    // Mapeo del campo a la columna 'descripcion_mat' de la tabla 'materias'
-    $sql = "INSERT INTO materias (descripcion_mat) VALUES (?)";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("s", $nombre_materia);
-
-    if ($stmt->execute()) {
-        $mensaje = '<div class="alert alert-success mt-3">¡Materia registrada correctamente!</div>';
-    } else {
-        $mensaje = '<div class="alert alert-danger mt-3">Error al registrar: ' . $conexion->error . '</div>';
+if (isset($_GET['status'])) {
+    if ($_GET['status'] == 'success') {
+        $mensaje = '<div class="alert alert-success mt-3">¡Alumno registrado correctamente!</div>';
+    } elseif ($_GET['status'] == 'error') {
+        $msgError = $_GET['msg'] ?? 'Ocurrió un error inesperado.';
+        $mensaje = '<div class="alert alert-danger mt-3">Error al registrar: ' . htmlspecialchars($msgError) . '</div>';
     }
-
-    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -31,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Registro de Materias</title>
+    <title>Registro de Alumnos</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -96,24 +84,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="formulario">
 
     <div class="titulo">
-        <h2>Registro de Materias</h2>
+        <h2>Registro de Alumnos</h2>
     </div>
 
     <div class="contenido">
 
-        <!-- Mensaje de confirmación o error al insertar -->
+        <!-- Mensaje de confirmación o error enviado desde el backend -->
         <?php echo $mensaje; ?>
 
-        <form method="post" action="materias.php">
+        <!-- El action apunta hacia el script dentro de la carpeta procesos -->
+        <form method="post" action="../procesos/insert_alumno.php">
 
             <div class="mb-3">
-                <label class="form-label">
-                    Nombre de la materia
-                </label>
+                <label class="form-label">Nombre</label>
 
                 <input
                     type="text"
-                    name="nombre_materia"
+                    name="nombre"
                     class="form-control"
                     required
                 >
@@ -121,46 +108,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             <div class="mb-3">
-                <label class="form-label">
-                    Clave de la materia
-                </label>
+                <label class="form-label">Apellido paterno</label>
 
                 <input
                     type="text"
-                    name="clave"
+                    name="apellido_paterno"
                     class="form-control"
+                    required
                 >
             </div>
 
 
             <div class="mb-3">
-                <label class="form-label">
-                    Créditos
-                </label>
+                <label class="form-label">Apellido materno</label>
 
                 <input
-                    type="number"
-                    name="creditos"
+                    type="text"
+                    name="apellido_materno"
                     class="form-control"
+                    required
                 >
             </div>
 
 
             <div class="mb-3">
-                <label class="form-label">
-                    Horas semanales
-                </label>
+                <label class="form-label">Número de control</label>
 
                 <input
-                    type="number"
-                    name="horas"
+                    type="text"
+                    name="numero_control"
                     class="form-control"
+                    required
+                >
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+
+                <input
+                    type="email"
+                    name="correo"
+                    class="form-control"
+                    required
                 >
             </div>
 
 
             <button type="submit" class="btn btn-sae">
-                Registrar materia
+                Registrar alumno
             </button>
 
         </form>
@@ -179,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="pie">
 
-        Registro de materias - Programación II Emmanuel Lopez Cornejo
+        Registro de alumnos - Programación II Emmanuel Lopez Cornejo
 
     </div>
 
