@@ -1,19 +1,27 @@
 <?php
 include_once("../conexion.php");
 
-$idprof = $_GET['idprof'] ?? 0;
+if (isset($_GET['idprof'])) {
+    $idprof = intval($_GET['idprof']);
 
-if ($idprof > 0) {
     $sql = "UPDATE profesores SET estatus_prof = 'BAJA' WHERE idprof = ?";
+    
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("i", $idprof);
-
-    if ($stmt->execute()) {
-        header("Location: ../catalogos/list_profesores.php?status=deleted");
-        exit();
+    if ($stmt) {
+        $stmt->bind_param("i", $idprof);
+        if ($stmt->execute()) {
+            header("Location: ../crude/crude_profesores.php?status=baja_ok");
+            exit();
+        } else {
+            echo "Error al dar de baja: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        echo "Error en la consulta: " . $conexion->error;
     }
-    $stmt->close();
+} else {
+    header("Location: ../crude/crude_profesores.php");
+    exit();
 }
-header("Location: ../catalogos/list_profesores.php");
-exit();
+$conexion->close();
 ?>

@@ -1,5 +1,4 @@
 <?php
-// Capturar respuestas enviadas desde procesos/insert_grupo.php
 $mensaje = "";
 if (isset($_GET['status'])) {
     if ($_GET['status'] == 'success') {
@@ -10,112 +9,88 @@ if (isset($_GET['status'])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Grupos</title>
-
-    <!-- Bootstrap CSS -->
+    <title>Registro de Grupos - SAE</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <style>
-        body {
-            background-color: #f3f1f4;
+        body { background-color: #f3f1f4; }
+        .formulario {
+            background-color: white;
+            max-width: 1000px;
+            margin: 30px auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
         }
-
         .titulo {
             background-color: #172554;
             color: white;
             padding: 15px;
             text-align: center;
-            border-radius: 5px 5px 0 0;
         }
-
-        .titulo h2 {
-            margin: 0;
-        }
-
-        .formulario {
-            background-color: white;
-            max-width: 1000px;
-            margin: 50px auto;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-        }
-
-        .contenido {
-            padding: 20px;
-        }
-
+        .titulo h2 { margin: 0; font-size: 1.8rem; }
+        .contenido { padding: 25px; }
         .btn-sae {
             background-color: #9f1239;
             color: white;
             border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
         }
-
-        .btn-sae:hover {
-            background-color: #881337;
-            color: white;
-        }
-
+        .btn-sae:hover { background-color: #881337; color: white; }
         .pie {
             text-align: center;
-            padding: 10px;
+            padding: 15px;
             color: #666;
+            font-size: 0.9rem;
             border-top: 1px solid #eee;
-        }
-
-        .regresar {
-            margin-top: 15px;
         }
     </style>
 </head>
-
 <body>
 
-<div class="formulario">
+<?php include_once("../navegacion/nav.php"); ?>
 
-    <div class="titulo">
-        <h2>Registro de Grupos</h2>
-    </div>
-
-    <div class="contenido">
-
-        <!-- Mensaje de confirmación o error -->
-        <?php echo $mensaje; ?>
-
-        <form method="post" action="../procesos/insert_grupo.php">
-
-            <div class="mb-3">
-                <label class="form-label">Clave del Grupo</label>
-                <input type="text" name="clave_grupo" class="form-control" required placeholder="Ej. GRP-606">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nombre / Descripción del Grupo</label>
-                <input type="text" name="nombre_grupo" class="form-control" required placeholder="Ej. 4° Semestre Tecnologías de la Información etc">
-            </div>
-
-            <button type="submit" class="btn btn-sae">
-                Registrar grupo
-            </button>
-
-        </form>
-
-        <div class="regresar">
-            <a href="../index.php">Regresar al inicio</a>
+<div class="container">
+    <div class="formulario">
+        <div class="titulo">
+            <h2>Registro de Grupos</h2>
         </div>
 
-    </div>
+        <div class="contenido">
+            <?php echo $mensaje; ?>
 
-    <div class="pie">
-        Registro de grupos - Programación II Emmanuel Lopez Cornejo
-    </div>
+            <form method="post" action="../procesos/insert_grupo.php">
+                <div class="mb-3">
+                    <label class="form-label">Clave del grupo</label>
+                    <input type="text" name="clave_grupo" class="form-control" required placeholder="Ej. 406">
+                </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Nombre del grupo / Semestre</label>
+                    <input type="text" name="nombre_grupo" class="form-control" required placeholder="Ej. 4° Semestre Tecnologías de la Información">
+                </div>
+
+                <div class="d-flex align-items-center gap-3 mt-4">
+                    <button type="submit" class="btn btn-sae">Registrar grupo</button>
+                    <a href="../crude/crude_grupos.php" class="btn btn-outline-secondary">Regresar al catálogo</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="pie">
+            Registro de grupos - Programación II Emmanuel Lopez Cornejo
+        </div>
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
